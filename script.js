@@ -7,20 +7,28 @@ document.getElementById('upload-csv').addEventListener('change', function (e) {
         const data = results.data;
         if (data.length === 0) return;
   
-        let html = "<table><thead><tr>";
-        Object.keys(data[0]).forEach(key => {
-          html += `<th>${key}</th>`;
-        });
-        html += "</tr></thead><tbody>";
+        let html = "<div class='grid'>";
         data.forEach(row => {
-          html += "<tr>";
-          Object.values(row).forEach(value => {
-            html += `<td>${value}</td>`;
-          });
-          html += "</tr>";
+          const loginUrl = row['Comment'];
+          const username = row['Username'];
+          const password = row['Password'];
+          const profile_name = row['Profile Name'];
+          const expiration = row['Expiration'];
+          const validity = row['Validity'];
+  
+          // Générer un QR code avec login URL
+          const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(loginUrl)}&size=100x100`;
+  
+          html += `
+            <div class="card">
+              <div class = "connexsys"> <strong> CONNEXSYS TICKETS </strong> </div>
+              <div class="title">  User : <strong>${username} </strong><br> Pwd : <strong>${password}</strong> <br> Time : ${profile_name}</div>
+              <div classe="expi_val"> Exp : ${expiration} <br> Valid : ${validity} </div>
+            </div>
+          `;
         });
-        html += "</tbody></table>";
-        document.getElementById('table-container').innerHTML = html;
+        html += "</div>";
+        document.getElementById('card-grid').innerHTML = html;
       }
     });
   });
